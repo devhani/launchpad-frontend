@@ -30,6 +30,8 @@ const SushiProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if (ethereum) {
       const chainId = Number(ethereum.chainId)
+
+      console.log("ETHEREUM CONNECTED", ethereum, chainId)
       const sushiLib = new Sushi(ethereum, chainId, false, {
         defaultAccount: ethereum.selectedAddress,
         defaultConfirmations: 1,

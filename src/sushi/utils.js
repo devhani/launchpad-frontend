@@ -70,7 +70,8 @@ export const getPoolWeight = async (masterChefContract, pid) => {
 }
 
 export const getEarned = async (masterChefContract, pid, account) => {
-  return masterChefContract.methods.pendingSushi(pid, account).call()
+  //console.log("masterchef", masterChefContract, masterChefContract.methods.pendingMark )
+  return masterChefContract.methods.pendingMark(pid, account).call()
 }
 
 export const getTotalLPWethValue = async (
@@ -123,6 +124,7 @@ export const approve = async (lpContract, masterChefContract, account) => {
 }
 
 export const getSushiSupply = async (sushi) => {
+  //console.log("SUSHI CONTARCT", sushi.contracts.sushi)
   return new BigNumber(await sushi.contracts.sushi.methods.totalSupply().call())
 }
 
