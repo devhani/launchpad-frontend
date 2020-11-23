@@ -1,11 +1,13 @@
 import BigNumber from 'bignumber.js'
 
-export const getBalanceNumber = (balance: BigNumber, decimals = 18) => {
+export const getBalanceNumber = (balance: BigNumber, decimals = 9) => {
+	//console.log("STARTING BALANCE", balance, balance.toNumber())
   const displayBalance = balance.dividedBy(new BigNumber(10).pow(decimals))
+  //console.log("DISPLAY BALANCE", displayBalance, displayBalance.toNumber())
   return displayBalance.toNumber()
 }
 
-export const getDisplayBalance = (balance: BigNumber, decimals = 18) => {
+export const getDisplayBalance = (balance: BigNumber, decimals = 9) => {
   const displayBalance = balance.dividedBy(new BigNumber(10).pow(decimals))
   if (displayBalance.lt(1)) {
     return displayBalance.toPrecision(4)

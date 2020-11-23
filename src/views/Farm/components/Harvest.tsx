@@ -20,18 +20,20 @@ const Harvest: React.FC<HarvestProps> = ({ pid }) => {
   const { onReward } = useReward(pid)
 
   return (
-    <Card>
+
       <CardContent>
         <StyledCardContentInner>
           <StyledCardHeader>
-            <CardIcon>🍣</CardIcon>
+            <img src={require('./../../../assets/img/MARK.png')} style={{width:50, height:50, margin:8}}/>
+            <StyledActionSpacer />
             <Value value={getBalanceNumber(earnings)} />
-            <Label text="SUSHI Earned" />
+            <StyledActionSpacer />
+            <Label text="MARK Earned" />
           </StyledCardHeader>
           <StyledCardActions>
             <Button
               disabled={!earnings.toNumber() || pendingTx}
-              text={pendingTx ? 'Collecting SUSHI' : 'Harvest'}
+              text={pendingTx ? 'Claiming MARK...' : 'Claim MARK'}
               onClick={async () => {
                 setPendingTx(true)
                 await onReward()
@@ -41,7 +43,6 @@ const Harvest: React.FC<HarvestProps> = ({ pid }) => {
           </StyledCardActions>
         </StyledCardContentInner>
       </CardContent>
-    </Card>
   )
 }
 
@@ -54,7 +55,7 @@ const StyledCardActions = styled.div`
   display: flex;
   justify-content: center;
   margin-top: ${(props) => props.theme.spacing[6]}px;
-  width: 100%;
+  width: 50%;
 `
 
 const StyledSpacer = styled.div`
@@ -68,6 +69,10 @@ const StyledCardContentInner = styled.div`
   flex: 1;
   flex-direction: column;
   justify-content: space-between;
+`
+const StyledActionSpacer = styled.div`
+  height: ${(props) => props.theme.spacing[4]}px;
+  width: ${(props) => props.theme.spacing[4]}px;
 `
 
 export default Harvest

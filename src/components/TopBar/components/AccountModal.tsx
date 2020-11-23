@@ -14,7 +14,7 @@ import ModalContent from '../../ModalContent'
 import ModalTitle from '../../ModalTitle'
 import Spacer from '../../Spacer'
 import Value from '../../Value'
-
+import markIcon from '../../../assets/img/MARK.png'
 const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
   const { account, reset } = useWallet()
 
@@ -28,18 +28,17 @@ const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
 
   return (
     <Modal>
-      <ModalTitle text="My Account" />
+      <ModalTitle text="My Wallet" />
       <ModalContent>
-        <Spacer />
 
         <div style={{ display: 'flex' }}>
           <StyledBalanceWrapper>
             <CardIcon>
-              <span>🍣</span>
+              <img src={markIcon} style={{maxHeight:48, maxWidth:48}}/>
             </CardIcon>
             <StyledBalance>
               <Value value={getBalanceNumber(sushiBalance)} />
-              <Label text="SUSHI Balance" />
+              <Label text="MARK Balance" />
             </StyledBalance>
           </StyledBalanceWrapper>
         </div>
@@ -51,14 +50,11 @@ const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
           variant="secondary"
         />
         <Spacer />
-        <Button
-          onClick={handleSignOutClick}
-          text="Sign out"
-          variant="secondary"
-        />
       </ModalContent>
       <ModalActions>
-        <Button onClick={onDismiss} text="Cancel" />
+                      <div style={{textAlign:"center", display:"block",}}>
+          <a style={{color:"#999", textAlign:"center", display:"inline-block", padding:14, border:"1px solid #999", borderRadius:12}} onClick={onDismiss}>Close</a>
+        </div>
       </ModalActions>
     </Modal>
   )

@@ -8,14 +8,17 @@ const Nav: React.FC = () => {
       <StyledLink exact activeClassName="active" to="/">
         Home
       </StyledLink>
-      <StyledLink exact activeClassName="active" to="/farms">
-        Menu
-      </StyledLink>
-      <StyledLink exact activeClassName="active" to="/staking">
-        Staking
+      <StyledLink exact activeClassName="active" to="/pools">
+        Pools
       </StyledLink>
       <StyledAbsoluteLink
-        href="https://medium.com/sushiswap/the-sushiswap-project-c4049ea9941e"
+        href="https://www.youtube.com/watch?v=LnrFEBsbV0k"
+        target="_blank"
+      >
+        Video Tutorial
+      </StyledAbsoluteLink>
+      <StyledAbsoluteLink
+        href="https://benchmarkprotocol.medium.com/5941b02859e7"
         target="_blank"
       >
         About

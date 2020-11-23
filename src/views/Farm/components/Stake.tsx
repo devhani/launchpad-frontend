@@ -24,10 +24,11 @@ import WithdrawModal from './WithdrawModal'
 interface StakeProps {
   lpContract: Contract
   pid: number
-  tokenName: string
+  tokenName: string,
+  name: string
 }
 
-const Stake: React.FC<StakeProps> = ({ lpContract, pid, tokenName }) => {
+const Stake: React.FC<StakeProps> = ({ lpContract, pid, tokenName, name }) => {
   const [requestedApproval, setRequestedApproval] = useState(false)
 
   const allowance = useAllowance(lpContract)
@@ -69,20 +70,26 @@ const Stake: React.FC<StakeProps> = ({ lpContract, pid, tokenName }) => {
   }, [onApprove, setRequestedApproval])
 
   return (
-    <Card>
+
       <CardContent>
         <StyledCardContentInner>
           <StyledCardHeader>
-            <CardIcon>👨🏻‍🍳</CardIcon>
-            <Value value={getBalanceNumber(stakedBalance)} />
-            <Label text={`${tokenName} Tokens Staked`} />
+            <div style={{ position:"relative"}}>
+              <img src={require(`./../../../assets/img/${name.split("-")[0]}.png`)} style={{width:50, height:50, marginLeft:15, marginRight:15, marginBottom:12}}/>
+              <img src={require(`./../../../assets/img/${name.split("-")[1]}.png`)} style={{width:30, height:30, margin:8, position:"absolute", bottom:0, right:-10}}/>
+            </div>
+            <StyledActionSpacer />
+            <Value value={getBalanceNumber(stakedBalance, 18)} decimals={18}/>
+            <StyledActionSpacer />
+            <Label text={`${tokenName} Staked`} />
+
           </StyledCardHeader>
           <StyledCardActions>
             {!allowance.toNumber() ? (
               <Button
                 disabled={requestedApproval}
                 onClick={handleApprove}
-                text={`Approve ${tokenName}`}
+                text={!requestedApproval ? `Approve ${tokenName}` : "Loading...."}
               />
             ) : (
               <>
@@ -91,16 +98,20 @@ const Stake: React.FC<StakeProps> = ({ lpContract, pid, tokenName }) => {
                   text="Unstake"
                   onClick={onPresentWithdraw}
                 />
-                <StyledActionSpacer />
+                {(new Date() < new Date(1608814800*1000)) ?
+                <div style={{position: 'absolute', right: -75, }}>
+                
                 <IconButton onClick={onPresentDeposit}>
                   <AddIcon />
                 </IconButton>
+                </div>
+                : null
+              }
               </>
             )}
           </StyledCardActions>
         </StyledCardContentInner>
       </CardContent>
-    </Card>
   )
 }
 
@@ -111,9 +122,10 @@ const StyledCardHeader = styled.div`
 `
 const StyledCardActions = styled.div`
   display: flex;
+  position:relative;
   justify-content: center;
   margin-top: ${(props) => props.theme.spacing[6]}px;
-  width: 100%;
+  width: 50%;
 `
 
 const StyledActionSpacer = styled.div`

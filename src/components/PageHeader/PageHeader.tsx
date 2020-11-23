@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-
+import Spacer from '../../components/Spacer'
 import Container from '../Container'
-
+import logo from '../../assets/img/logo-no-icon.png'
 interface PageHeaderProps {
   icon: React.ReactNode
   subtitle?: string
@@ -13,8 +13,17 @@ const PageHeader: React.FC<PageHeaderProps> = ({ icon, subtitle, title }) => {
   return (
     <Container size="sm">
       <StyledPageHeader>
-        <StyledIcon>{icon}</StyledIcon>
-        <StyledTitle>{title}</StyledTitle>
+        { !icon ? <Spacer size="lg" /> :  <StyledIcon>{icon}</StyledIcon> }
+        { !(title=="Benchmark LaunchpadNEVERMIND") ? 
+          <StyledTitle>{title}</StyledTitle>
+          :
+          <div style={{flexDirection:"row", display:"flex"}}>
+            <img src={logo} height="60" style={{ marginTop: -12, zIndex:2 }} />
+            <Spacer size="md" />
+                  <StyledTitle>Launchpad</StyledTitle>
+          </div>
+        }
+        <Spacer size="md" />
         <StyledSubtitle>{subtitle}</StyledSubtitle>
       </StyledPageHeader>
     </Container>
@@ -26,26 +35,27 @@ const StyledPageHeader = styled.div`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding-bottom: ${(props) => props.theme.spacing[6]}px;
-  padding-top: ${(props) => props.theme.spacing[6]}px;
+  padding-bottom: ${(props) => props.theme.spacing[4]}px;
   margin: 0 auto;
 `
 
 const StyledIcon = styled.div`
-  font-size: 120px;
-  height: 120px;
-  line-height: 120px;
+  font-size: 175px;
+  height: 175px;
+  line-height: 175px;
   text-align: center;
-  width: 120px;
+  width: 175px;
 `
 
 const StyledTitle = styled.h1`
-  font-family: 'Kaushan Script', sans-serif;
+  font-family: 'Goldman', sans-serif;
   color: ${(props) => props.theme.color.grey[600]};
   font-size: 36px;
   font-weight: 700;
   margin: 0;
   padding: 0;
+  z-index:2;
+  text-shadow: -0.1rem -0.1rem 1rem #666, 0.1rem 0.1rem 1rem #666, 0 0 1rem #2CF48B, 0 0 2rem #2CF48B, 0 0 3rem #2CF48B;
 `
 
 const StyledSubtitle = styled.h3`

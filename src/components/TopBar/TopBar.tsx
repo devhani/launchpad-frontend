@@ -59,7 +59,7 @@ const StyledAccountButtonWrapper = styled.div`
   align-items: center;
   display: flex;
   justify-content: flex-end;
-  width: 156px;
+  width: 186px;
   @media (max-width: 400px) {
     justify-content: center;
     width: auto;

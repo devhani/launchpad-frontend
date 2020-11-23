@@ -24,6 +24,7 @@ export class Contracts {
     this.sushi = new this.web3.eth.Contract(SushiAbi)
     this.masterChef = new this.web3.eth.Contract(MasterChefAbi)
     this.weth = new this.web3.eth.Contract(WETHAbi)
+    this.usdc = new this.web3.eth.Contract(ERC20Abi)
 
     this.pools = supportedPools.map((pool) =>
       Object.assign(pool, {
@@ -50,6 +51,7 @@ export class Contracts {
     setProvider(this.sushi, contractAddresses.sushi[networkId])
     setProvider(this.masterChef, contractAddresses.masterChef[networkId])
     setProvider(this.weth, contractAddresses.weth[networkId])
+    setProvider(this.usdc, contractAddresses.usdc[networkId])
 
     this.pools.forEach(
       ({ lpContract, lpAddress, tokenContract, tokenAddress }) => {

@@ -55,11 +55,12 @@ const StyledModalWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   position: fixed;
+  z-index:3;
   top: 0; right: 0; bottom: 0; left: 0;
 `
 
 const StyledModalBackdrop = styled.div`
-  background-color: ${props => props.theme.color.grey[600]}aa;
+  background-color: ${props => props.theme.color.black}aa;
   position: absolute;
   top: 0; right: 0; bottom: 0; left: 0;
 `

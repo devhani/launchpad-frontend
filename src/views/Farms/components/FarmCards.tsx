@@ -15,88 +15,171 @@ import useAllStakedValue, {
 } from '../../../hooks/useAllStakedValue'
 import useFarms from '../../../hooks/useFarms'
 import useSushi from '../../../hooks/useSushi'
+import useEthPrice from '../../../hooks/useEthPrice'
+import useStakedBalance from '../../../hooks/useStakedBalance'
 import { getEarned, getMasterChefContract } from '../../../sushi/utils'
 import { bnToDec } from '../../../utils'
+import markIcon from '../../assets/img/mark.png'
+const Flip = require('react-reveal/Flip');
 
 interface FarmWithStakedValue extends Farm, StakedValue {
-  apy: BigNumber
+  apy: BigNumber,
+  totalBalance: BigNumber
 }
 
-const FarmCards: React.FC = () => {
+interface FarmCardsProps {
+  auth: Boolean
+}
+const FarmCards: React.FC<FarmCardsProps>  = ({auth}) => {
   const [farms] = useFarms()
+  //console.log("FARMS", farms)
   const { account } = useWallet()
+  const ethPrice = useEthPrice()
   const stakedValue = useAllStakedValue()
 
-  const sushiIndex = farms.findIndex(
-    ({ tokenSymbol }) => tokenSymbol === 'SUSHI',
-  )
+  if (auth){
+    //console.log("STAKED VALUE ALL", stakedValue)
 
-  const sushiPrice =
-    sushiIndex >= 0 && stakedValue[sushiIndex]
-      ? stakedValue[sushiIndex].tokenPriceInWeth
-      : new BigNumber(0)
 
-  const BLOCKS_PER_YEAR = new BigNumber(2336000)
-  const SUSHI_PER_BLOCK = new BigNumber(1000)
 
-  const rows = farms.reduce<FarmWithStakedValue[][]>(
-    (farmRows, farm, i) => {
-      const farmWithStakedValue = {
-        ...farm,
-        ...stakedValue[i],
-        apy: stakedValue[i]
-          ? sushiPrice
-              .times(SUSHI_PER_BLOCK)
-              .times(BLOCKS_PER_YEAR)
-              .times(stakedValue[i].poolWeight)
-              .div(stakedValue[i].totalWethValue)
-          : null,
-      }
-      const newFarmRows = [...farmRows]
-      if (newFarmRows[newFarmRows.length - 1].length === 3) {
-        newFarmRows.push([farmWithStakedValue])
-      } else {
-        newFarmRows[newFarmRows.length - 1].push(farmWithStakedValue)
-      }
-      return newFarmRows
-    },
-    [[]],
-  )
+    const sushiIndex = farms.findIndex(
+      ({ tokenSymbol }) => tokenSymbol === 'MARK',
+    )
 
-  return (
-    <StyledCards>
-      {!!rows[0].length ? (
-        rows.map((farmRow, i) => (
-          <StyledRow key={i}>
-            {farmRow.map((farm, j) => (
-              <React.Fragment key={j}>
-                <FarmCard farm={farm} />
-                {(j === 0 || j === 1) && <StyledSpacer />}
-              </React.Fragment>
-            ))}
-          </StyledRow>
-        ))
-      ) : (
-        <StyledLoadingWrapper>
-          <Loader text="Cooking the rice ..." />
-        </StyledLoadingWrapper>
-      )}
-    </StyledCards>
-  )
+    //console.log("APY FARM INDEX", sushiIndex)
+
+    const sushiPrice = (stakedValue[sushiIndex] && stakedValue[sushiIndex].tokenPriceInWeth.toNumber() > 0)
+        ? stakedValue[sushiIndex].tokenPriceInWeth
+        : new BigNumber((1.42/ethPrice)) //1.4 USD in ethereum
+
+    //console.log("MARK PRICE", sushiPrice.toString(), stakedValue[sushiIndex], sushiIndex, farms[sushiIndex])
+
+    const BLOCKS_PER_YEAR = new BigNumber(2336000)
+    const SUSHI_PER_BLOCK = new BigNumber(34.16666)
+
+    const rows = farms.reduce<FarmWithStakedValue[][]>(
+      (farmRows, farm, i) => {
+
+        const farmWithStakedValue = {
+          ...farm,
+          ...stakedValue[i],
+          totalBalance: stakedValue[i]
+            ? stakedValue[i].totalBalance
+            : null,
+          apy: stakedValue[i]
+            ? sushiPrice
+                .times(SUSHI_PER_BLOCK)
+                .times(BLOCKS_PER_YEAR)
+                .times(stakedValue[i].poolWeight)
+                .div(stakedValue[i].totalWethValue)
+            : null,
+        }
+
+        /*if (stakedValue[i]){
+          //console.log("FARM LP TOKEN SUPPLY",stakedValue[i] )
+          console.log("APY", i, farmWithStakedValue.apy.toNumber(), stakedValue[i].poolWeight.toNumber(), stakedValue[i].totalWethValue.toNumber());
+        }*/
+        
+        const newFarmRows = [...farmRows]
+        if (newFarmRows[newFarmRows.length - 1].length === 4) {
+          newFarmRows.push([farmWithStakedValue])
+        } else {
+          newFarmRows[newFarmRows.length - 1].push(farmWithStakedValue)
+        }
+        return newFarmRows
+      },
+      [[]],
+    )
+
+      return (
+        <StyledCards>
+          {!!rows[0].length ? (
+            rows.map((farmRow, i) => (
+              <StyledRow key={i}>
+                {farmRow.map((farm, j) => (
+                  <React.Fragment key={j}>
+                    <FarmCard farm={farm} auth={auth} />
+                    {(j === 0 || j === 1 || j === 2) && <StyledSpacer />}
+                  </React.Fragment>
+                ))}
+              </StyledRow>
+            ))
+          ) : (
+            <StyledLoadingWrapper>
+              <Loader text="Loading..." />
+            </StyledLoadingWrapper>
+          )}
+        </StyledCards>
+      )
+
+  } else {
+     //console.log("FARMS", farms)
+    const rows = farms.reduce<FarmWithStakedValue[][]>(
+      (farmRows, farm, i) => {
+        let myapy = false;
+        const farmWithStakedValue = {
+          ...farm,
+          ...stakedValue[i],
+          apy: new BigNumber(0),
+        }
+        
+        const newFarmRows = [...farmRows]
+        if (newFarmRows[newFarmRows.length - 1].length === 4) {
+          newFarmRows.push([farmWithStakedValue])
+        } else {
+          newFarmRows[newFarmRows.length - 1].push(farmWithStakedValue)
+        }
+        return newFarmRows
+      },
+      [[]],
+    )
+
+    //console.log("MY ROWS", rows)
+      return (
+        <StyledCards>
+          {!!rows[0].length ? (
+            rows.map((farmRow, i) => (
+              <StyledRow key={i}>
+                {farmRow.map((farm, j) => (
+                  <React.Fragment key={j}>
+                    <FarmCard farm={farm} auth={auth} />
+                    {(j === 0 || j === 1 || j === 2) && <StyledSpacer />}
+                  </React.Fragment>
+                ))}
+              </StyledRow>
+            ))
+          ) : (
+            <StyledLoadingWrapper>
+              <Loader text="Loading..." />
+            </StyledLoadingWrapper>
+          )}
+        </StyledCards>
+      )
+  }
 }
 
 interface FarmCardProps {
   farm: FarmWithStakedValue
+  auth: Boolean
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ farm, auth }) => {
   const [startTime, setStartTime] = useState(0)
   const [harvestable, setHarvestable] = useState(0)
 
   const { account } = useWallet()
   const { lpTokenAddress } = farm
   const sushi = useSushi()
+  const ethPrice = useEthPrice()
 
+  const myLPTokenBalance = useStakedBalance(farm.pid);
+  //console.log("FARM", farm)
+
+  const mySharePercent = myLPTokenBalance.div(farm.totalBalance).times(new BigNumber(100))
+                      .toNumber()
+                      
+//console.log("MY SHARE PERCENT", mySharePercent)
+  //console.log("MY FARM SHARE PERCENT", farm.pid, mySharePercent, myLPTokenBalance, farm.totalBalance)
   const renderer = (countdownProps: CountdownRenderProps) => {
     const { hours, minutes, seconds } = countdownProps
     const paddedSeconds = seconds < 10 ? `0${seconds}` : seconds
@@ -127,40 +210,41 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   const poolActive = true // startTime * 1000 - Date.now() <= 0
 
   return (
+    
     <StyledCardWrapper>
-      {farm.tokenSymbol === 'SUSHI' && <StyledCardAccent />}
       <Card>
         <CardContent>
           <StyledContent>
-            <CardIcon>{farm.icon}</CardIcon>
-            <StyledTitle>{farm.name}</StyledTitle>
-            <StyledDetails>
+              { (farm.name.split("-")[0]=="MARK") ? (
+                  <MultiplierBadge>3x Rewards</MultiplierBadge>
+                ) : null
+              }
+
+          <Flip left>
+          <div style={{position:"relative"}}>
+            <img src={require(`./../../../assets/img/${farm.icon}.png`)} style={{width:50, height:50, margin:8}}/>
+            <img src={require(`./../../../assets/img/${farm.name.split("-")[1]}.png`)} style={{width:30, height:30, margin:8, position:"absolute", bottom:0, right:-15}}/>
+            </div></Flip>
+            <Flip left><StyledTitle>{farm.name}</StyledTitle></Flip>
+            {/*<StyledDetails>
               <StyledDetail>Deposit {farm.lpToken.toUpperCase()}</StyledDetail>
               <StyledDetail>Earn {farm.earnToken.toUpperCase()}</StyledDetail>
-            </StyledDetails>
-            <Spacer />
-            <Button
-              disabled={!poolActive}
-              text={poolActive ? 'Select' : undefined}
-              to={`/farms/${farm.id}`}
-            >
-              {!poolActive && (
-                <Countdown
-                  date={new Date(startTime * 1000)}
-                  renderer={renderer}
-                />
-              )}
-            </Button>
+            </StyledDetails>*/}
+            <Spacer size="sm"/>
+            {!auth ? (<StyledInsight>
+              <span>APY</span>
+              <span>Connect Wallet</span>
+              </StyledInsight>):(
             <StyledInsight>
               <span>APY</span>
               <span>
-                {farm.apy
+                {(farm.apy && farm.apy.toNumber()==Infinity) ? '999,999,999,999%': (farm.apy && isNaN(farm.apy.toNumber())) ? '999,999,999,999%' : farm.apy
                   ? `${farm.apy
                       .times(new BigNumber(100))
                       .toNumber()
                       .toLocaleString('en-US')
                       .slice(0, -1)}%`
-                  : 'Loading ...'}
+                  : ' Loading ...'}
               </span>
               {/* <span>
                 {farm.tokenAmount
@@ -174,13 +258,97 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
                   : '-'}{' '}
                 ETH
               </span> */}
-            </StyledInsight>
+            </StyledInsight>)}
+
+            {!auth ? (<StyledInsight>
+              <span>Pool Value</span>
+              <span>---</span>
+              </StyledInsight>):(
+            <StyledInsight>
+              <span>Pool Value</span>
+              <span>
+                {(farm.totalWethValue && farm.totalWethValue.toNumber()==0) ? '$0.00': farm.totalWethValue 
+                  ? '$'+`${farm.totalWethValue
+                      .times(ethPrice)
+                      .toNumber()
+                      .toLocaleString('en-US')
+                      .slice(0, -1)}`
+                  : ' Loading ...'}
+              </span>
+              {/* <span>
+                {farm.tokenAmount
+                  ? (farm.tokenAmount.toNumber() || 0).toLocaleString('en-US')
+                  : '-'}{' '}
+                {farm.tokenSymbol}
+              </span>
+              <span>
+                {farm.wethAmount
+                  ? (farm.wethAmount.toNumber() || 0).toLocaleString('en-US')
+                  : '-'}{' '}
+                ETH
+              </span> */}
+            </StyledInsight>)}
+
+            {!auth ? (<StyledInsight>
+              <span>Pool Share</span>
+              <span>---</span>
+              </StyledInsight>):(
+            <StyledInsight>
+              <span>Pool Share</span>
+              <span>
+                {(isNaN(mySharePercent)) ? "0%" : mySharePercent
+                  ? mySharePercent.toLocaleString('en-US')+'%'
+                  : (mySharePercent === 0)
+                  ?
+                  "0%"
+                  : ' Loading ...'}
+              </span>
+              {/* <span>
+                {farm.tokenAmount
+                  ? (farm.tokenAmount.toNumber() || 0).toLocaleString('en-US')
+                  : '-'}{' '}
+                {farm.tokenSymbol}
+              </span>
+              <span>
+                {farm.wethAmount
+                  ? (farm.wethAmount.toNumber() || 0).toLocaleString('en-US')
+                  : '-'}{' '}
+                ETH
+              </span> */}
+            </StyledInsight>)}
+
+            <Spacer />
+
+            <Button
+              disabled={!auth || !poolActive}
+              text={(auth && poolActive) ? 'Select' : 'Connect Wallet to Select'}
+              to={`/pools/${farm.id}`}
+              noBottomMargin={true}
+            >
+              {!poolActive && (
+                <Countdown
+                  date={new Date(startTime * 1000)}
+                  renderer={renderer}
+                />
+              )}
+            </Button>
           </StyledContent>
         </CardContent>
       </Card>
     </StyledCardWrapper>
   )
 }
+
+const MultiplierBadge = styled.div`
+  background-color: ${(props) => props.theme.color.green[500]};
+  border-radius:6px;
+  padding:6px 12px;
+  font-size:12px;
+  color:#000;
+  font-weight:700;
+  position:absolute;
+  top:-14px;
+`
 
 const RainbowLight = keyframes`
   
@@ -249,7 +417,7 @@ const StyledRow = styled.div`
 
 const StyledCardWrapper = styled.div`
   display: flex;
-  width: calc((900px - ${(props) => props.theme.spacing[4]}px * 2) / 3);
+  width: calc((900px - ${(props) => props.theme.spacing[4]}px * 3) / 4);
   position: relative;
 `
 
@@ -265,6 +433,7 @@ const StyledContent = styled.div`
   align-items: center;
   display: flex;
   flex-direction: column;
+  height:100%;
 `
 
 const StyledSpacer = styled.div`
@@ -286,13 +455,12 @@ const StyledInsight = styled.div`
   justify-content: space-between;
   box-sizing: border-box;
   border-radius: 8px;
-  background: #fffdfa;
-  color: #aa9584;
+  color: #ffffff;
   width: 100%;
   margin-top: 12px;
   line-height: 32px;
   font-size: 13px;
-  border: 1px solid #e6dcd5;
+  border: 1px solid #999;
   text-align: center;
   padding: 0 12px;
 `

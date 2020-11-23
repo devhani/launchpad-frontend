@@ -1,16 +1,30 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Card: React.FC = ({ children }) => <StyledCard>{children}</StyledCard>
+
+interface CardProps {
+  noglow?: Boolean
+}
+
+const Card: React.FC<CardProps> = ({ children, noglow }) => (!noglow ? <StyledCard>{children}</StyledCard> : <StyledCardNoGlow>{children}</StyledCardNoGlow>)
 
 const StyledCard = styled.div`
-  background: ${(props) => props.theme.color.grey[200]};
-  border: 1px solid ${(props) => props.theme.color.grey[300]}ff;
+  background: ${(props) => props.theme.color.dark[200]};
+  border: 1px solid ${(props) => props.theme.color.dark[100]}ff;
   border-radius: 12px;
-  box-shadow: inset 1px 1px 0px ${(props) => props.theme.color.grey[100]};
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  &:hover{
+  	    box-shadow: 0 0 2rem #2CF48B;
+  }
+`
+const StyledCardNoGlow = styled.div`
+  background: ${(props) => props.theme.color.dark[200]};
+  border: 1px solid ${(props) => props.theme.color.dark[100]}ff;
+  border-radius: 12px;
   display: flex;
   flex: 1;
   flex-direction: column;
 `
-
 export default Card

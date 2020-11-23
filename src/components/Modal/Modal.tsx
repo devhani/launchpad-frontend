@@ -2,13 +2,14 @@ import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
 export interface ModalProps {
-  onDismiss?: () => void
+  onDismiss?: () => void,
+  noPadding?:boolean
 }
 
-const Modal: React.FC = ({ children }) => {
+const Modal: React.FC<ModalProps> = ({ children, noPadding }) => {
   return (
     <StyledResponsiveWrapper>
-      <StyledModal>{children}</StyledModal>
+      <StyledModal noPadding={noPadding}>{children}</StyledModal>
     </StyledResponsiveWrapper>
   )
 }
@@ -40,13 +41,14 @@ const StyledResponsiveWrapper = styled.div`
     animation: ${mobileKeyframes} 0.3s forwards ease-out;
   }
 `
-
-const StyledModal = styled.div`
-  padding: 0 20px;
-  background: ${(props) => props.theme.color.grey[200]};
-  border: 1px solid ${(props) => props.theme.color.grey[300]}ff;
+interface StyledModalProps {
+  noPadding?: boolean
+}
+const StyledModal = styled.div<StyledModalProps>`
+  padding: ${(props) => props.noPadding ? "0px" : "0 20px"};
+  background: ${(props) => props.theme.color.black};
+  border: 1px solid ${(props) => props.theme.color.dark[100]};
   border-radius: 12px;
-  box-shadow: inset 1px 1px 0px ${(props) => props.theme.color.grey[100]};
   display: flex;
   flex-direction: column;
   position: relative;

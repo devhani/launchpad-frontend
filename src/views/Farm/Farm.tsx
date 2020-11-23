@@ -12,7 +12,10 @@ import { getMasterChefContract } from '../../sushi/utils'
 import { getContract } from '../../utils/erc20'
 import Harvest from './components/Harvest'
 import Stake from './components/Stake'
-
+import Card from '../../components/Card'
+import CardContent from '../../components/CardContent'
+import { NavLink } from 'react-router-dom'
+const Flip = require('react-reveal/Flip');
 const Farm: React.FC = () => {
   const { farmId } = useParams()
   const {
@@ -56,30 +59,36 @@ const Farm: React.FC = () => {
 
   return (
     <>
+    <Spacer />
+      
       <PageHeader
-        icon={icon}
+        icon={false}
         subtitle={`Deposit ${lpTokenName}  Tokens and earn ${earnTokenName}`}
         title={name}
       />
+
       <StyledFarm>
         <StyledCardsWrapper>
           <StyledCardWrapper>
-            <Harvest pid={pid} />
-          </StyledCardWrapper>
-          <Spacer />
-          <StyledCardWrapper>
+              <Card>
+              
+              <NavLink style={{zIndex:2, color:"#999", textAlign:"center", display:"block", position:"absolute", left:20, top:20, textDecoration:"none", padding:14, border:"1px solid #999", borderRadius:12}} to="/pools">&#x2190; Back</NavLink>
+      <Flip left><CardContent>
             <Stake
               lpContract={lpContract}
               pid={pid}
               tokenName={lpToken.toUpperCase()}
+              name={name}
             />
+          <Spacer />
+
+            <Harvest pid={pid}/>
+                
+      </CardContent></Flip>
+      </Card>
           </StyledCardWrapper>
         </StyledCardsWrapper>
         <Spacer size="lg" />
-        <StyledInfo>
-          ⭐️ Every time you stake and unstake LP tokens, the contract will
-          automagically harvest SUSHI rewards for you!
-        </StyledInfo>
         <Spacer size="lg" />
       </StyledFarm>
     </>
@@ -107,6 +116,7 @@ const StyledCardsWrapper = styled.div`
 
 const StyledCardWrapper = styled.div`
   display: flex;
+  position:relative;
   flex: 1;
   flex-direction: column;
   @media (max-width: 768px) {

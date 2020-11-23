@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
+import { supportedPools } from './lib/constants'
 
 BigNumber.config({
   EXPONENTIAL_AT: 1000,
@@ -22,7 +23,9 @@ export const getSushiAddress = (sushi) => {
 export const getWethContract = (sushi) => {
   return sushi && sushi.contracts && sushi.contracts.weth
 }
-
+export const getUsdcContract = (sushi) => {
+  return sushi && sushi.contracts && sushi.contracts.usdc
+}
 export const getMasterChefContract = (sushi) => {
   return sushi && sushi.contracts && sushi.contracts.masterChef
 }
@@ -31,6 +34,7 @@ export const getSushiContract = (sushi) => {
 }
 
 export const getFarms = (sushi) => {
+  //console.log("SUPPORT POOLS", supportedPools)
   return sushi
     ? sushi.contracts.pools.map(
         ({
@@ -53,12 +57,35 @@ export const getFarms = (sushi) => {
           tokenAddress,
           tokenSymbol,
           tokenContract,
-          earnToken: 'sushi',
+          earnToken: 'MARK',
           earnTokenAddress: sushi.contracts.sushi.options.address,
           icon,
         }),
       )
-    : []
+    : supportedPools.map(({
+          pid,
+          name,
+          symbol,
+          icon,
+          tokenAddress,
+          tokenSymbol,
+          tokenContract,
+          lpAddress,
+          lpContract,
+        }) => ({
+          pid,
+          id: symbol,
+          name,
+          lpToken: symbol,
+          lpTokenAddress: lpAddress,
+          lpContract,
+          tokenAddress,
+          tokenSymbol,
+          tokenContract,
+          earnToken: 'MARK',
+          icon,
+        }),
+      )
 }
 
 export const getPoolWeight = async (masterChefContract, pid) => {
@@ -71,49 +98,114 @@ export const getPoolWeight = async (masterChefContract, pid) => {
 
 export const getEarned = async (masterChefContract, pid, account) => {
   //console.log("masterchef", masterChefContract, masterChefContract.methods.pendingMark )
-  return masterChefContract.methods.pendingMark(pid, account).call()
+  return masterChefContract.methods.pendingMark(pid, account).call();
+  //console.log("MARK EARNED", markEarned)
+  //return markEarned;
 }
 
 export const getTotalLPWethValue = async (
   masterChefContract,
   wethContract,
+  usdcContract,
+  ethPrice,
   lpContract,
   tokenContract,
   pid,
 ) => {
+
+  //console.log("GET TOTAL LP VALUE", pid)
   // Get balance of the token address
   const tokenAmountWholeLP = await tokenContract.methods
     .balanceOf(lpContract.options.address)
     .call()
+
+    //console.log("TOKEN AMOUNT WHOEL LP", pid, tokenAmountWholeLP)
   const tokenDecimals = await tokenContract.methods.decimals().call()
+
+  //console.log("TOKEN DECIMALS", pid, tokenDecimals)
   // Get the share of lpContract that masterChefContract owns
   const balance = await lpContract.methods
     .balanceOf(masterChefContract.options.address)
     .call()
+
+    //console.log("token balance", pid, balance)
   // Convert that into the portion of total lpContract = p1
   const totalSupply = await lpContract.methods.totalSupply().call()
-  // Get total weth value for the lpContract = w1
-  const lpContractWeth = await wethContract.methods
-    .balanceOf(lpContract.options.address)
-    .call()
-  // Return p1 * w1 * 2
-  const portionLp = new BigNumber(balance).div(new BigNumber(totalSupply))
-  const lpWethWorth = new BigNumber(lpContractWeth)
-  const totalLpWethValue = portionLp.times(lpWethWorth).times(new BigNumber(2))
-  // Calculate
-  const tokenAmount = new BigNumber(tokenAmountWholeLP)
-    .times(portionLp)
-    .div(new BigNumber(10).pow(tokenDecimals))
 
-  const wethAmount = new BigNumber(lpContractWeth)
-    .times(portionLp)
-    .div(new BigNumber(10).pow(18))
-  return {
-    tokenAmount,
-    wethAmount,
-    totalWethValue: totalLpWethValue.div(new BigNumber(10).pow(18)),
-    tokenPriceInWeth: wethAmount.div(tokenAmount),
-    poolWeight: await getPoolWeight(masterChefContract, pid),
+  //console.log("Total supply", pid, totalSupply)
+  //console.log("total supply", totalSupply)
+  // Get total weth value for the lpContract = w1
+
+  if (pid == 19 || pid==4){ // usdc pairs
+    const lpContractUsdc = await usdcContract.methods
+      .balanceOf(lpContract.options.address)
+      .call()
+
+
+     // console.log("LP contract USDC", pid, lpContractUsdc)
+      //console.log("lp weth", lpContractWeth)
+
+    // Return p1 * w1 * 2
+    const portionLp = new BigNumber(balance).div(new BigNumber(totalSupply))
+    const lpUsdcWorth = new BigNumber(lpContractUsdc)
+    const totalLpUsdcValue = portionLp.times(lpUsdcWorth).times(new BigNumber(2))
+
+    //console.log("TOTAL USDC POOL VALUE", totalLpUsdcValue.div(new BigNumber(10).pow(6)).toString())
+    // Calculate
+    const tokenAmount = new BigNumber(tokenAmountWholeLP)
+      .times(portionLp)
+      .div(new BigNumber(10).pow(tokenDecimals))
+      //console.log("Token amount", tokenAmount)
+    const usdcAmount = new BigNumber(lpContractUsdc)
+      .times(portionLp)
+      .div(new BigNumber(10).pow(6))
+
+     // console.log("usdc LP VALUE RET", tokenAmount.toString(), usdcAmount.toString(), pid)
+
+     // console.log("USDC TOTAL VALUE", (totalLpUsdcValue).div(new BigNumber(10).pow(6)))
+    //  console.log("USDC TOKEN PRICE", (usdcAmount).div(tokenAmount).div(ethPrice))
+     // console.log("USDC AMOUNT", usdcAmount)
+
+    return {
+      tokenAmount,
+      totalBalance: new BigNumber(balance),
+      wethAmount: usdcAmount.div(ethPrice),
+      totalWethValue: (totalLpUsdcValue).div(new BigNumber(10).pow(6)).div(ethPrice),
+      tokenPriceInWeth: (usdcAmount).div(tokenAmount).div(ethPrice),
+      poolWeight: await getPoolWeight(masterChefContract, pid),
+    }
+  } else {
+
+    const lpContractWeth = await wethContract.methods
+      .balanceOf(lpContract.options.address)
+      .call()
+
+     // console.log("LP contract weth", pid, lpContractWeth)
+
+      //console.log("lp weth", lpContractWeth)
+
+    // Return p1 * w1 * 2
+    const portionLp = new BigNumber(balance).div(new BigNumber(totalSupply))
+    const lpWethWorth = new BigNumber(lpContractWeth)
+    const totalLpWethValue = portionLp.times(lpWethWorth).times(new BigNumber(2))
+    // Calculate
+    const tokenAmount = new BigNumber(tokenAmountWholeLP)
+      .times(portionLp)
+      .div(new BigNumber(10).pow(tokenDecimals))
+      //console.log("Token amount", tokenAmount)
+    const wethAmount = new BigNumber(lpContractWeth)
+      .times(portionLp)
+      .div(new BigNumber(10).pow(18))
+
+     // console.log("LP VALUE RET", tokenAmount.toString(), wethAmount.toString(), wethAmount.div(tokenAmount).toString(), pid)
+    return {
+      tokenAmount,
+      totalBalance: new BigNumber(balance),
+      wethAmount,
+      totalWethValue: totalLpWethValue.div(new BigNumber(10).pow(18)),
+      tokenPriceInWeth: wethAmount.div(tokenAmount),
+      poolWeight: await getPoolWeight(masterChefContract, pid),
+    }
   }
 }
 
@@ -125,10 +217,23 @@ export const approve = async (lpContract, masterChefContract, account) => {
 
 export const getSushiSupply = async (sushi) => {
   //console.log("SUSHI CONTARCT", sushi.contracts.sushi)
-  return new BigNumber(await sushi.contracts.sushi.methods.totalSupply().call())
+  let totalSupply = await sushi.contracts.sushi.methods.totalSupply().call();
+  console.log("TOTAL SUPPLY ", totalSupply, (new BigNumber(totalSupply)))
+  return new BigNumber(totalSupply)
 }
 
+
+
+
+
 export const stake = async (masterChefContract, pid, amount, account) => {
+
+    
+  /*console.log("masterChefContract", masterChefContract)
+  let PoolInfo = await masterChefContract.methods.poolInfo(0).call();
+  console.log("GET POOL INFO", PoolInfo);*/
+
+  console.log("STAKE", pid, amount)
   return masterChefContract.methods
     .deposit(
       pid,
@@ -164,6 +269,10 @@ export const harvest = async (masterChefContract, pid, account) => {
 }
 
 export const getStaked = async (masterChefContract, pid, account) => {
+  //console.log("masterChefContract", masterChefContract)
+  let PoolInfo = await masterChefContract.methods.poolInfo(0).call();
+  //console.log("GET POOL INFO", PoolInfo);
+  //console.log("CALLING GET STAKED")
   try {
     const { amount } = await masterChefContract.methods
       .userInfo(pid, account)

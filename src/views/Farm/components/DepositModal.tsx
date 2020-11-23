@@ -7,6 +7,28 @@ import ModalTitle from '../../../components/ModalTitle'
 import TokenInput from '../../../components/TokenInput'
 import { getFullDisplayBalance } from '../../../utils/formatBalance'
 
+
+
+const Banner: React.FC = () => {
+
+    return (
+      <span><span style={{ width: '175px', height: '175px', display: "block", margin: "0 auto" }} id="loading-vid-container" dangerouslySetInnerHTML={{ __html: `
+        <video
+          style="width: 175px; height: 175px;"
+          id="banner-vid"
+          loop
+          muted
+          autoplay
+          playsinline
+        ><source src="https://i.imgur.com/EeFeEeY.mp4" type="video/mp4"/></video>
+      ` }}></span>
+      <p style={{color:"#fff", textAlign:"center"}}>Transaction pending... Please wait</p>
+
+      </span>
+    )
+  
+}
+
 interface DepositModalProps extends ModalProps {
   max: BigNumber
   onConfirm: (amount: string) => void
@@ -40,6 +62,10 @@ const DepositModal: React.FC<DepositModalProps> = ({
   return (
     <Modal>
       <ModalTitle text={`Deposit ${tokenName} Tokens`} />
+      {pendingTx ?
+        <Banner/>
+        : null
+      }
       <TokenInput
         value={val}
         onSelectMax={handleSelectMax}
@@ -48,7 +74,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
         symbol={tokenName}
       />
       <ModalActions>
-        <Button text="Cancel" variant="secondary" onClick={onDismiss} />
+        <Button text="Close" variant="secondary" onClick={onDismiss}/>
         <Button
           disabled={pendingTx}
           text={pendingTx ? 'Pending Confirmation' : 'Confirm'}

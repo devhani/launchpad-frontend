@@ -13,7 +13,7 @@ interface WalletCardProps {
 }
 
 const WalletCard: React.FC<WalletCardProps> = ({ icon, onConnect, title }) => (
-  <Card>
+  <Card noglow={true}>
     <CardContent>
       <CardIcon>{icon}</CardIcon>
       <CardTitle text={title} />

@@ -8,10 +8,12 @@ interface ButtonProps {
   disabled?: boolean,
   href?: string,
   onClick?: () => void,
-  size?: 'sm' | 'md' | 'lg',
+  size?: 'sm' | 'md' | 'lg' | 'connect',
   text?: string,
   to?: string,
-  variant?: 'default' | 'secondary' | 'tertiary'
+  variant?: 'default' | 'secondary' | 'tertiary',
+  pools?:boolean,
+  noBottomMargin?:boolean
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,17 +25,19 @@ const Button: React.FC<ButtonProps> = ({
   text,
   to,
   variant,
+  pools,
+  noBottomMargin
 }) => {
   const { color, spacing } = useContext(ThemeContext)
 
   let buttonColor: string
   switch (variant) {
     case 'secondary':
-      buttonColor = color.grey[500]
+      buttonColor = color.black
       break
     case 'default':
     default:
-      buttonColor = color.primary.main
+      buttonColor = color.black
   }
 
   let boxShadow: string
@@ -42,26 +46,30 @@ const Button: React.FC<ButtonProps> = ({
   let fontSize: number
   switch (size) {
     case 'sm':
-      boxShadow = `4px 4px 8px ${color.grey[300]},
-        -8px -8px 16px ${color.grey[100]}FF;`
       buttonPadding = spacing[3]
       buttonSize = 36
       fontSize = 14
       break
     case 'lg':
-      boxShadow = `6px 6px 12px ${color.grey[300]},
-        -12px -12px 24px ${color.grey[100]}ff;`
       buttonPadding = spacing[4]
       buttonSize = 72
       fontSize = 16
       break
+
+    case 'connect':
+      buttonPadding = spacing[4]
+      buttonSize = 56
+      fontSize = 18
+      break
     case 'md':
     default:
-      boxShadow = `6px 6px 12px ${color.grey[300]},
-        -12px -12px 24px -2px ${color.grey[100]}ff;`
       buttonPadding = spacing[4]
       buttonSize = 56
       fontSize = 16
+  }
+
+  if (pools){
+    fontSize = 18;
   }
 
   const ButtonChild = useMemo(() => {
@@ -83,6 +91,8 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       padding={buttonPadding}
       size={buttonSize}
+      pools={pools}
+      noBottomMargin={noBottomMargin}
     >
       {children}
       {ButtonChild}
@@ -96,12 +106,14 @@ interface StyledButtonProps {
   disabled?: boolean,
   fontSize: number,
   padding: number,
-  size: number
+  size: number,
+  pools?: boolean,
+  noBottomMargin?:boolean
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
   align-items: center;
-  background-color: ${props => props.theme.color.grey[200]};
+  background-color: ${props => !props.disabled ? props.theme.color.green[500] : props.theme.color.dark[100] };
   border: 0;
   border-radius: 12px;
   box-shadow: ${props => props.boxShadow};
@@ -116,9 +128,11 @@ const StyledButton = styled.button<StyledButtonProps>`
   padding-left: ${props => props.padding}px;
   padding-right: ${props => props.padding}px;
   pointer-events: ${props => !props.disabled ? undefined : 'none'};
-  width: 100%;
+  width: ${props => !props.pools ? "100%" : "60%"};
+  margin: ${props => !props.pools ? "auto" : "0 auto"};
+  margin-bottom:${props => !props.noBottomMargin ? "auto" : '0'};
   &:hover {
-    background-color: ${props => props.theme.color.grey[100]};
+    box-shadow: 0 0 0 2px #2cf48b;
   }
 `
 

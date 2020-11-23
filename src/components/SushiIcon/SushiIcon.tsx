@@ -1,4 +1,5 @@
 import React from 'react'
+import markIcon from '../../assets/img/mark.png'
 
 interface SushiIconProps {
   size?: number
@@ -15,7 +16,7 @@ const SushiIcon: React.FC<SushiIconProps> = ({ size = 36, v1, v2, v3 }) => (
       filter: v1 ? 'saturate(0.5)' : undefined,
     }}
   >
-    🍣
+    <img src={markIcon} style={{maxHeight:36, maxWidth:36}}/>
   </span>
 )
 

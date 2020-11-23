@@ -16,7 +16,11 @@ import useTokenBalance from '../../../hooks/useTokenBalance'
 import useSushi from '../../../hooks/useSushi'
 import { getSushiAddress, getSushiSupply } from '../../../sushi/utils'
 import { getBalanceNumber } from '../../../utils/formatBalance'
+import markIcon from '../../assets/img/mark.png'
+import Countdown from 'react-countdown';
+import useEthPrice from '../../../hooks/useEthPrice'
 
+const Flip = require('react-reveal/Flip');
 const PendingRewards: React.FC = () => {
   const [start, setStart] = useState(0)
   const [end, setEnd] = useState(0)
@@ -57,7 +61,7 @@ const PendingRewards: React.FC = () => {
       <CountUp
         start={start}
         end={end}
-        decimals={end < 0 ? 4 : end > 1e5 ? 0 : 3}
+        decimals={end < 0 ? 2 : end > 1e5 ? 0 : 2}
         duration={1}
         onStart={() => {
           setScale(1.25)
@@ -69,15 +73,33 @@ const PendingRewards: React.FC = () => {
   )
 }
 
+
+
 const Balances: React.FC = () => {
-  const [totalSupply, setTotalSupply] = useState<BigNumber>()
+  const [totalSupply, setTotalSupply] = useState<BigNumber>();
+  //const [ethPrice, setEthPrice] = useState<number>();
   const sushi = useSushi()
+
+  const ethPrice = useEthPrice()
+  //console.log("ETH PRICE IMPORTED", ethPrice)
   const sushiBalance = useTokenBalance(getSushiAddress(sushi))
   const { account, ethereum }: { account: any; ethereum: any } = useWallet()
+
+
+  const allStakedValue = useAllStakedValue()
+  const [farms] = useFarms()
+
+
+  const sumWeth = farms.reduce(
+    (c, { id }, i) => (allStakedValue[i] && allStakedValue[i].totalWethValue) ? (c + (allStakedValue[i].totalWethValue.toNumber() || 0)) : 0,
+    0,
+  )
+  //console.log("sumWeth", sumWeth)
 
   useEffect(() => {
     async function fetchTotalSupply() {
       const supply = await getSushiSupply(sushi)
+      console.log("SUPPLY", supply)
       setTotalSupply(supply)
     }
     if (sushi) {
@@ -88,40 +110,59 @@ const Balances: React.FC = () => {
   return (
     <StyledWrapper>
       <Card>
+        <Flip left>
         <CardContent>
           <StyledBalances>
             <StyledBalance>
-              <SushiIcon />
-              <Spacer />
               <div style={{ flex: 1 }}>
-                <Label text="Your SUSHI Balance" />
+                <Label text="Your MARK Balance" />
                 <Value
-                  value={!!account ? getBalanceNumber(sushiBalance) : 'Locked'}
+                  value={!!account ? getBalanceNumber(sushiBalance, 9) : 'Connect Wallet 🦊'}
                 />
               </div>
             </StyledBalance>
           </StyledBalances>
         </CardContent>
         <Footnote>
-          Pending harvest
+          Pending
           <FootnoteValue>
-            <PendingRewards /> SUSHI
+            <PendingRewards /> MARK
           </FootnoteValue>
         </Footnote>
+        </Flip>
       </Card>
       <Spacer />
 
       <Card>
+      <Flip left>
         <CardContent>
-          <Label text="Total SUSHI Supply" />
+          <Label text="Total MARK Supply" />
           <Value
-            value={totalSupply ? getBalanceNumber(totalSupply) : 'Locked'}
+            value={totalSupply ? getBalanceNumber(totalSupply, 9) : 'Connect Wallet 🦊'}
           />
         </CardContent>
         <Footnote>
-          New rewards per block
-          <FootnoteValue>1,000 SUSHI</FootnoteValue>
+          Rewards per block
+          <FootnoteValue>34.16</FootnoteValue>
         </Footnote>
+        </Flip>
+      </Card>
+
+      <Spacer />
+
+            <Card>
+            <Flip left>
+        <CardContent>
+          <Label text="Total Value Locked" />
+          <Value
+            value={(!!account && (ethPrice && (sumWeth || sumWeth===0))) ? "$" + (ethPrice * sumWeth).toLocaleString('en-US', {maximumFractionDigits:2})  : (!!account) ? "Loading...": "Connect Wallet 🦊"}
+          />
+        </CardContent>
+        <Footnote>
+          Total rewards
+          <FootnoteValue>6.75m MARK</FootnoteValue>
+        </Footnote>
+        </Flip>
       </Card>
     </StyledWrapper>
   )
@@ -131,7 +172,7 @@ const Footnote = styled.div`
   font-size: 14px;
   padding: 8px 20px;
   color: ${(props) => props.theme.color.grey[400]};
-  border-top: solid 1px ${(props) => props.theme.color.grey[300]};
+  border-top: solid 2px ${(props) => props.theme.color.green[500]};
 `
 const FootnoteValue = styled.div`
   font-family: 'Roboto Mono', monospace;
