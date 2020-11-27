@@ -54,13 +54,13 @@ const StyledCardHeader = styled.div`
 const StyledCardActions = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: ${(props) => props.theme.spacing[6]}px;
-  width: 50%;
+  margin-top: 18px;
+  width: 65%;
 `
 
 const StyledSpacer = styled.div`
-  height: ${(props) => props.theme.spacing[4]}px;
-  width: ${(props) => props.theme.spacing[4]}px;
+  height: 6px;
+  width: 100%;
 `
 
 const StyledCardContentInner = styled.div`
@@ -71,8 +71,8 @@ const StyledCardContentInner = styled.div`
   justify-content: space-between;
 `
 const StyledActionSpacer = styled.div`
-  height: ${(props) => props.theme.spacing[4]}px;
-  width: ${(props) => props.theme.spacing[4]}px;
+  height: 6px;
+  width: 100%;
 `
 
 export default Harvest

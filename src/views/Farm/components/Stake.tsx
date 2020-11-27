@@ -80,8 +80,12 @@ const Stake: React.FC<StakeProps> = ({ lpContract, pid, tokenName, name }) => {
             </div>
             <StyledActionSpacer />
             <Value value={getBalanceNumber(stakedBalance, 18)} decimals={18}/>
-            <StyledActionSpacer />
+            <StyledActionSpacer/>
             <Label text={`${tokenName} Staked`} />
+
+            {tokenName.split("-")[0]=="SUSHI"?
+            <p style={{color:"orange"}}>Please only deposit SUSHISWAP SLP tokens here!</p> : null
+          }
 
           </StyledCardHeader>
           <StyledCardActions>
@@ -124,13 +128,13 @@ const StyledCardActions = styled.div`
   display: flex;
   position:relative;
   justify-content: center;
-  margin-top: ${(props) => props.theme.spacing[6]}px;
-  width: 50%;
+  margin-top: 16px;
+  width: 65%;
 `
 
 const StyledActionSpacer = styled.div`
-  height: ${(props) => props.theme.spacing[4]}px;
-  width: ${(props) => props.theme.spacing[4]}px;
+  height: 6px;
+  width: 100%;
 `
 
 const StyledCardContentInner = styled.div`

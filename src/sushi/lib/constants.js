@@ -84,6 +84,8 @@ export const supportedPools = [
     symbol: 'MARK-ETH UNI-V2 LP',
     tokenSymbol: 'MARK',
     icon: 'MARK',
+    lpAddress: '0x6f23d2fedb4ff4f1e9f8c521f66e5f2a1451b6f3',
+    tokenAddress:'0x67c597624B17b16fb77959217360B7cD18284253'
   },
   {
     pid: 19,
@@ -97,6 +99,8 @@ export const supportedPools = [
     symbol: 'MARK-USDC UNI-V2 LP',
     tokenSymbol: 'MARK',
     icon: 'MARK',
+    lpAddress: '0x7f0ad87b99ba16e6e651120c2e230cf6928c3d15',
+    tokenAddress:'0x67c597624B17b16fb77959217360B7cD18284253'
   },
    {
     pid: 0,
@@ -110,6 +114,8 @@ export const supportedPools = [
     symbol: 'LINK-ETH UNI-V2 LP',
     tokenSymbol: 'LINK',
     icon: 'LINK',
+    lpAddress: '0xa2107fa5b38d9bbd2c461d6edf11b11a50f6b974',
+    tokenAddress:'0x514910771af9ca656af840dff83e8264ecf986ca'
   },
    {
     pid: 1,
@@ -123,6 +129,8 @@ export const supportedPools = [
     symbol: 'MKR-ETH UNI-V2 LP',
     tokenSymbol: 'MKR',
     icon: 'MKR',
+    lpAddress: '0xc2adda861f89bbb333c90c492cb837741916a225',
+    tokenAddress:'0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2'
   },
   {
     pid: 2,
@@ -136,6 +144,8 @@ export const supportedPools = [
     symbol: 'AAVE-ETH UNI-V2 LP',
     tokenSymbol: 'AAVE',
     icon: 'AAVE',
+    lpAddress: '0xdfc14d2af169b0d36c4eff567ada9b2e0cae044f',
+    tokenAddress:'0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9'
   },
   {
     pid: 3,
@@ -149,6 +159,8 @@ export const supportedPools = [
     symbol: 'SNX-ETH UNI-V2 LP',
     tokenSymbol: 'SNX',
     icon: 'SNX',
+    lpAddress: '0x43ae24960e5534731fc831386c07755a2dc33d47',
+    tokenAddress:'0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f'
   },
   {
     pid: 4,
@@ -162,6 +174,8 @@ export const supportedPools = [
     symbol: 'renBTC-USDC UNI-V2 LP',
     tokenSymbol: 'REN',
     icon: 'REN',
+    lpAddress: '0xdd71f5e002143d34ea24696600bc4d82b904fafa',
+    tokenAddress:'0xeb4c2781e4eba804ce9a9803c67d0893436bb27d'
   },
   {
     pid: 5,
@@ -175,6 +189,8 @@ export const supportedPools = [
     symbol: 'YFI-ETH UNI-V2 LP',
     tokenSymbol: 'YFI',
     icon: 'YFI',
+    lpAddress: '0x2fdbadf3c4d5a8666bc06645b8358ab803996e28',
+    tokenAddress:'0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e'
   },
   {
     pid: 6,
@@ -188,6 +204,8 @@ export const supportedPools = [
     symbol: 'UMA-ETH UNI-V2 LP',
     tokenSymbol: 'UMA',
     icon: 'UMA',
+    lpAddress: '0x88d97d199b9ed37c29d846d00d443de980832a22',
+    tokenAddress:'0x04fa0d235c4abf4bcf4787af4cf447de572ef828'
   },
   {
     pid: 7,
@@ -201,6 +219,8 @@ export const supportedPools = [
     symbol: 'COMP-ETH UNI-V2 LP',
     tokenSymbol: 'COMP',
     icon: 'COMP',
+    lpAddress: '0xcffdded873554f362ac02f8fb1f02e5ada10516f',
+    tokenAddress:'0xc00e94cb662c3520282e6f5717214004a7f26888'
   },
   {
     pid: 8,
@@ -214,6 +234,8 @@ export const supportedPools = [
     symbol: 'BZRX-ETH UNI-V2 LP',
     tokenSymbol: 'BZRX',
     icon: 'BZRX',
+    lpAddress: '0xb9b752f7f4a4680eeb327ffe728f46666763a796',
+    tokenAddress:'0x56d811088235f11c8920698a204a5010a788f4b3'
   },
   {
     pid: 9,
@@ -227,6 +249,8 @@ export const supportedPools = [
     symbol: 'KNC-ETH UNI-V2 LP',
     tokenSymbol: 'KNC',
     icon: 'KNC',
+    lpAddress: '0xf49c43ae0faf37217bdcb00df478cf793edd6687',
+    tokenAddress:'0xdd974d5c2e2928dea5f71b9825b8b646686bd200'
   },
   {
     pid: 17,
@@ -240,6 +264,8 @@ export const supportedPools = [
     symbol: 'SUSHI-ETH SLP',
     tokenSymbol: 'SUSHI',
     icon: 'SUSHI',
+    lpAddress: '0x795065dcc9f64b5614c407a6efdc400da6221fb0',
+    tokenAddress:'0x6b3595068778dd592e39a122f4f5a5cf09c90fe2'
   },
   {
     pid: 10,
@@ -253,6 +279,8 @@ export const supportedPools = [
     symbol: 'AMPL-ETH UNI-V2 LP',
     tokenSymbol: 'AMPL',
     icon: 'AMPL',
+    lpAddress: '0xc5be99a02c6857f9eac67bbce58df5572498f40c',
+    tokenAddress:'0xd46ba6d942050d489dbd938a2c909a5d5039a161'
   },{
     pid: 11,
     lpAddresses: {
@@ -265,6 +293,8 @@ export const supportedPools = [
     symbol: 'BAND-ETH UNI-V2 LP',
     tokenSymbol: 'BAND',
     icon: 'BAND',
+    lpAddress: '0xf421c3f2e695c2d4c0765379ccace8ade4a480d9',
+    tokenAddress:'0xba11d00c5f74255f56a5e366f4f77f5a186d7f55'
   },
   {
     pid: 12,
@@ -278,6 +308,8 @@ export const supportedPools = [
     symbol: 'LRC-ETH UNI-V2 LP',
     tokenSymbol: 'LRC',
     icon: 'LRC',
+    lpAddress: '0x8878df9e1a7c87dcbf6d3999d997f262c05d8c70',
+    tokenAddress:'0xbbbbca6a901c926f240b89eacb641d8aec7aeafd'
   },
   {
     pid: 13,
@@ -291,6 +323,8 @@ export const supportedPools = [
     symbol: 'OMG-ETH UNI-V2 LP',
     tokenSymbol: 'OMG',
     icon: 'OMG',
+    lpAddress: '0x48e313460dd00100e22230e56e0a87b394066844',
+    tokenAddress:'0xd26114cd6ee289accf82350c8d8487fedb8a0c07'
   },
   {
     pid: 14,
@@ -304,6 +338,8 @@ export const supportedPools = [
     symbol: 'ZRX-ETH UNI-V2 LP',
     tokenSymbol: 'ZRX',
     icon: 'ZRX',
+    lpAddress: '0xc6f348dd3b91a56d117ec0071c1e9b83c0996de4',
+    tokenAddress:'0xe41d2489571d322189246dafa5ebde1f4699f498'
   },
   {
     pid: 15,
@@ -317,6 +353,8 @@ export const supportedPools = [
     symbol: 'ENJ-ETH UNI-V2 LP',
     tokenSymbol: 'ENJ',
     icon: 'ENJ',
+    lpAddress: '0xe56c60b5f9f7b5fc70de0eb79c6ee7d00efa2625',
+    tokenAddress:'0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c'
   },
   {
     pid: 16,
@@ -330,5 +368,7 @@ export const supportedPools = [
     symbol: 'UNI-ETH UNI-V2 LP',
     tokenSymbol: 'UNI',
     icon: 'UNI',
+    lpAddress: '0xd3d2e2692501a5c9ca623199d38826e513033a17',
+    tokenAddress:'0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
   },
 ]

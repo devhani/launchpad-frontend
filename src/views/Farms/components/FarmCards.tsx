@@ -226,6 +226,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, auth }) => {
             <img src={require(`./../../../assets/img/${farm.name.split("-")[1]}.png`)} style={{width:30, height:30, margin:8, position:"absolute", bottom:0, right:-15}}/>
             </div></Flip>
             <Flip left><StyledTitle>{farm.name}</StyledTitle></Flip>
+            <a href={`https://info.uniswap.org/pair/${farm.lpTokenAddress}`} target="_blank"><img src={require(`./../../../assets/img/info.png`)} style={{width:25, height:25, top:10, right:10, position:"absolute"}}/></a>
             {/*<StyledDetails>
               <StyledDetail>Deposit {farm.lpToken.toUpperCase()}</StyledDetail>
               <StyledDetail>Earn {farm.earnToken.toUpperCase()}</StyledDetail>
