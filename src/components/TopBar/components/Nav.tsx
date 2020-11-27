@@ -18,7 +18,7 @@ const Nav: React.FC = () => {
         Video Tutorial
       </StyledAbsoluteLink>
       <StyledAbsoluteLink
-        href="https://benchmarkprotocol.medium.com/5941b02859e7"
+        href="https://benchmarkprotocol.medium.com/benchmark-launchpad-farming-guide-5941b02859e7"
         target="_blank"
       >
         About

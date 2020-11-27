@@ -112,7 +112,7 @@ export const getTotalLPWethValue = async (
   tokenContract,
   pid,
 ) => {
-
+//console.log("TOKEN/LP contracts", tokenContract, lpContract)
   //console.log("GET TOTAL LP VALUE", pid)
   // Get balance of the token address
   const tokenAmountWholeLP = await tokenContract.methods
@@ -137,14 +137,15 @@ export const getTotalLPWethValue = async (
   // Get total weth value for the lpContract = w1
 
   if (pid == 19 || pid==4){ // usdc pairs
+
+    ///console.log("USDC PAIR")
     const lpContractUsdc = await usdcContract.methods
       .balanceOf(lpContract.options.address)
       .call()
 
 
-     // console.log("LP contract USDC", pid, lpContractUsdc)
-      //console.log("lp weth", lpContractWeth)
-
+      //console.log("LP contract USDC", pid, lpContractUsdc)
+      
     // Return p1 * w1 * 2
     const portionLp = new BigNumber(balance).div(new BigNumber(totalSupply))
     const lpUsdcWorth = new BigNumber(lpContractUsdc)
@@ -160,7 +161,7 @@ export const getTotalLPWethValue = async (
       .times(portionLp)
       .div(new BigNumber(10).pow(6))
 
-     // console.log("usdc LP VALUE RET", tokenAmount.toString(), usdcAmount.toString(), pid)
+      //console.log("usdc LP VALUE RET", tokenAmount.toString(), usdcAmount.toString(), pid)
 
      // console.log("USDC TOTAL VALUE", (totalLpUsdcValue).div(new BigNumber(10).pow(6)))
     //  console.log("USDC TOKEN PRICE", (usdcAmount).div(tokenAmount).div(ethPrice))
@@ -180,7 +181,7 @@ export const getTotalLPWethValue = async (
       .balanceOf(lpContract.options.address)
       .call()
 
-     // console.log("LP contract weth", pid, lpContractWeth)
+      //console.log("LP contract weth", pid, lpContractWeth)
 
       //console.log("lp weth", lpContractWeth)
 
@@ -192,12 +193,14 @@ export const getTotalLPWethValue = async (
     const tokenAmount = new BigNumber(tokenAmountWholeLP)
       .times(portionLp)
       .div(new BigNumber(10).pow(tokenDecimals))
+
       //console.log("Token amount", tokenAmount)
+
     const wethAmount = new BigNumber(lpContractWeth)
       .times(portionLp)
       .div(new BigNumber(10).pow(18))
 
-     // console.log("LP VALUE RET", tokenAmount.toString(), wethAmount.toString(), wethAmount.div(tokenAmount).toString(), pid)
+      //console.log("LP VALUE RET", tokenAmount.toString(), wethAmount.toString(), wethAmount.div(tokenAmount).toString(), pid)
     return {
       tokenAmount,
       totalBalance: new BigNumber(balance),

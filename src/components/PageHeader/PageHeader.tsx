@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import Spacer from '../../components/Spacer'
 import Container from '../Container'
 import logo from '../../assets/img/logo-no-icon.png'
+
+
 interface PageHeaderProps {
   icon: React.ReactNode
   subtitle?: string
@@ -14,17 +16,11 @@ const PageHeader: React.FC<PageHeaderProps> = ({ icon, subtitle, title }) => {
     <Container size="sm">
       <StyledPageHeader>
         { !icon ? <Spacer size="lg" /> :  <StyledIcon>{icon}</StyledIcon> }
-        { !(title=="Benchmark LaunchpadNEVERMIND") ? 
+
           <StyledTitle>{title}</StyledTitle>
-          :
-          <div style={{flexDirection:"row", display:"flex"}}>
-            <img src={logo} height="60" style={{ marginTop: -12, zIndex:2 }} />
-            <Spacer size="md" />
-                  <StyledTitle>Launchpad</StyledTitle>
-          </div>
-        }
-        <Spacer size="md" />
-        <StyledSubtitle>{subtitle}</StyledSubtitle>
+          <Spacer size="md" />
+          <StyledSubtitle>{subtitle}</StyledSubtitle>
+
       </StyledPageHeader>
     </Container>
   )
@@ -44,7 +40,8 @@ const StyledIcon = styled.div`
   height: 175px;
   line-height: 175px;
   text-align: center;
-  width: 175px;
+  z-index:0;
+
 `
 
 const StyledTitle = styled.h1`

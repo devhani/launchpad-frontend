@@ -8,6 +8,7 @@ import Spacer from '../../components/Spacer'
 import Balances from './components/Balances'
 import Countdown from 'react-countdown';
 
+import { useWallet } from 'use-wallet'
 const Banner: React.FC = () => {
 
     return (
@@ -25,14 +26,29 @@ const Banner: React.FC = () => {
   
 }
 
+
+
 const Home: React.FC = () => {
+  const { account } = useWallet()
   return (
     <Page>
+{/*}
+<div style={{ width: "100%", overflow: "hidden", height: "4rem", paddingLeft: "100%", boxSizing: "content-box"}}>
+<div className="ticker">
+  <div className="ticker__item">aaaa</div>
+  <div className="ticker__item">bbbbb</div>
+  <div className="ticker__item">ccccc</div>
+  <div className="ticker__item">dddddd</div>
+</div>
+</div>*/}
+
       <PageHeader
         icon={<Banner/>}
         title="Benchmark Launchpad"
         subtitle="Stake Uniswap LP tokens to farm MARK."
       />
+
+
       <Container>
         <Balances />
       </Container>
@@ -83,5 +99,8 @@ const StyledInfo = styled.h3`
     color: ${(props) => props.theme.color.grey[600]};
   }
 `
+
+
+
 
 export default Home

@@ -73,7 +73,10 @@ const Farm: React.FC = () => {
               <Card>
               
               <NavLink style={{zIndex:2, color:"#999", textAlign:"center", display:"block", position:"absolute", left:20, top:20, textDecoration:"none", padding:14, border:"1px solid #999", borderRadius:12}} to="/pools">&#x2190; Back</NavLink>
-      <Flip left><CardContent>
+      <a href={`https://info.uniswap.org/pair/${lpTokenAddress}`} target="_blank"><img src={require(`./../../assets/img/info.png`)} style={{zIndex:2, width:25, height:25, top:10, right:10, position:"absolute"}}/></a>
+
+      <Flip left>
+      <CardContent>
             <Stake
               lpContract={lpContract}
               pid={pid}
@@ -106,7 +109,7 @@ const StyledFarm = styled.div`
 
 const StyledCardsWrapper = styled.div`
   display: flex;
-  width: 600px;
+  width: 400px;
   @media (max-width: 768px) {
     width: 100%;
     flex-flow: column nowrap;

@@ -17,6 +17,7 @@ import Home from './views/Home'
 import FarmMenus from './views/Farms/components/FarmMenus'
 import Logo from './components/Logo'
 import EthPriceProvider from './contexts/EthPriceProvider'
+import APYProvider from './contexts/APYProvider'
 
 const App: React.FC = () => {
   const [mobileMenu, setMobileMenu] = useState(false)
@@ -82,13 +83,17 @@ const Providers: React.FC = ({ children }) => {
         }}
       >
       <EthPriceProvider>
+       <APYProvider>
         <SushiProvider>
           <TransactionProvider>
             <FarmsProvider>
-              <ModalsProvider>{children}</ModalsProvider>
+             
+                <ModalsProvider>{children}</ModalsProvider>
+              
             </FarmsProvider>
           </TransactionProvider>
         </SushiProvider>
+        </APYProvider>
         </EthPriceProvider>
       </UseWalletProvider>
     </ThemeProvider>

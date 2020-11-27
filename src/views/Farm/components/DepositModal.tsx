@@ -76,7 +76,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
       <ModalActions>
         <Button text="Close" variant="secondary" onClick={onDismiss}/>
         <Button
-          disabled={pendingTx}
+          disabled={(pendingTx || !val)}
           text={pendingTx ? 'Pending Confirmation' : 'Confirm'}
           onClick={async () => {
             setPendingTx(true)

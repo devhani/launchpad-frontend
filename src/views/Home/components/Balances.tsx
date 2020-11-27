@@ -21,6 +21,7 @@ import Countdown from 'react-countdown';
 import useEthPrice from '../../../hooks/useEthPrice'
 
 const Flip = require('react-reveal/Flip');
+
 const PendingRewards: React.FC = () => {
   const [start, setStart] = useState(0)
   const [end, setEnd] = useState(0)
@@ -79,14 +80,20 @@ const Balances: React.FC = () => {
   const [totalSupply, setTotalSupply] = useState<BigNumber>();
   //const [ethPrice, setEthPrice] = useState<number>();
   const sushi = useSushi()
+  const allStakedValue = useAllStakedValue()
+
 
   const ethPrice = useEthPrice()
-  //console.log("ETH PRICE IMPORTED", ethPrice)
+  console.log("ETH PRICE IMPORTED", ethPrice)
   const sushiBalance = useTokenBalance(getSushiAddress(sushi))
   const { account, ethereum }: { account: any; ethereum: any } = useWallet()
 
 
-  const allStakedValue = useAllStakedValue()
+/*
+  if (allStakedValue && allStakedValue[0]){
+    console.log("GOT ALL STAKED VALUE!!!!", allStakedValue[0].totalWethValue)
+  }
+  */
   const [farms] = useFarms()
 
 
@@ -94,12 +101,14 @@ const Balances: React.FC = () => {
     (c, { id }, i) => (allStakedValue[i] && allStakedValue[i].totalWethValue) ? (c + (allStakedValue[i].totalWethValue.toNumber() || 0)) : 0,
     0,
   )
+  //console.log("GOT SUM WETH", sumWeth)
+
   //console.log("sumWeth", sumWeth)
 
   useEffect(() => {
     async function fetchTotalSupply() {
       const supply = await getSushiSupply(sushi)
-      console.log("SUPPLY", supply)
+      //console.log("SUPPLY", supply)
       setTotalSupply(supply)
     }
     if (sushi) {
@@ -138,7 +147,7 @@ const Balances: React.FC = () => {
         <CardContent>
           <Label text="Total MARK Supply" />
           <Value
-            value={totalSupply ? getBalanceNumber(totalSupply, 9) : 'Connect Wallet 🦊'}
+            value={totalSupply ? getBalanceNumber(totalSupply, 9) : (!!account) ? "Loading...": "Connect Wallet 🦊"}
           />
         </CardContent>
         <Footnote>
@@ -155,7 +164,7 @@ const Balances: React.FC = () => {
         <CardContent>
           <Label text="Total Value Locked" />
           <Value
-            value={(!!account && (ethPrice && (sumWeth || sumWeth===0))) ? "$" + (ethPrice * sumWeth).toLocaleString('en-US', {maximumFractionDigits:2})  : (!!account) ? "Loading...": "Connect Wallet 🦊"}
+            value={((!!account && !!sumWeth) && (ethPrice && (sumWeth || sumWeth===0))) ? "$" + (ethPrice * sumWeth).toLocaleString('en-US', {maximumFractionDigits:2})  : (!!account) ? "Loading...": "Connect Wallet 🦊"}
           />
         </CardContent>
         <Footnote>
