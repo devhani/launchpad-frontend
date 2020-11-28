@@ -17,9 +17,19 @@ const PageHeader: React.FC<PageHeaderProps> = ({ icon, subtitle, title }) => {
       <StyledPageHeader>
         { !icon ? <Spacer size="lg" /> :  <StyledIcon>{icon}</StyledIcon> }
 
+        { !icon ? <>
           <StyledTitle>{title}</StyledTitle>
           <Spacer size="md" />
           <StyledSubtitle>{subtitle}</StyledSubtitle>
+          </>
+
+          :
+          <div style={{position:"relative", marginTop:-150, marginBottom:30}}>
+          <StyledTitle>{title}</StyledTitle>
+          <Spacer size="md" />
+          <StyledSubtitle>{subtitle}</StyledSubtitle>
+          </div>
+        }
 
       </StyledPageHeader>
     </Container>
@@ -36,9 +46,6 @@ const StyledPageHeader = styled.div`
 `
 
 const StyledIcon = styled.div`
-  font-size: 175px;
-  height: 175px;
-  line-height: 175px;
   text-align: center;
   z-index:0;
 

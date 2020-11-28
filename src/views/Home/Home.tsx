@@ -12,16 +12,16 @@ import { useWallet } from 'use-wallet'
 const Banner: React.FC = () => {
 
     return (
-      <span style={{ width: '175px', height: '175px' }} id="globe-vid-container" dangerouslySetInnerHTML={{ __html: `
+      <div dangerouslySetInnerHTML={{ __html: `
         <video
-          style="width: 175px; height: 175px;"
+          style="width: 500px;"
           id="banner-vid"
           loop
           muted
           autoplay
           playsinline
-        ><source src="https://i.imgur.com/V1VFx8E.mp4" type="video/mp4"/></video>
-      ` }}></span>
+        ><source src="https://i.imgur.com/LSwyBNL.mp4" type="video/mp4"/></video>
+      ` }}></div>
     )
   
 }

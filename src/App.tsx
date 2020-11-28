@@ -83,8 +83,10 @@ const Providers: React.FC = ({ children }) => {
         }}
       >
       <EthPriceProvider>
-       <APYProvider>
+      
+       
         <SushiProvider>
+        <APYProvider>
           <TransactionProvider>
             <FarmsProvider>
              
@@ -92,8 +94,9 @@ const Providers: React.FC = ({ children }) => {
               
             </FarmsProvider>
           </TransactionProvider>
+          </APYProvider>
         </SushiProvider>
-        </APYProvider>
+        
         </EthPriceProvider>
       </UseWalletProvider>
     </ThemeProvider>

@@ -103,6 +103,28 @@ export const getEarned = async (masterChefContract, pid, account) => {
   //return markEarned;
 }
 
+export const getEthPriceFromUniswap = async (wethContract, usdcContract) => {
+
+
+  const lpContractWeth = await wethContract.methods
+    .balanceOf("0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc")
+    .call()
+
+      const lpContractUsdc = await usdcContract.methods
+      .balanceOf("0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc")
+      .call()
+
+      const wethAmount = new BigNumber(lpContractWeth).div(new BigNumber(10).pow(18)).toNumber()
+
+      const usdcAmount = new BigNumber(lpContractUsdc).div(new BigNumber(10).pow(6)).toNumber()
+
+      const ethPrice = parseFloat((usdcAmount/wethAmount).toFixed(2))
+
+      //console.log("ETH PRICE?", (usdcAmount/wethAmount), wethAmount, usdcAmount )
+
+      return ethPrice;
+}
+
 export const getTotalLPWethValue = async (
   masterChefContract,
   wethContract,
@@ -112,6 +134,8 @@ export const getTotalLPWethValue = async (
   tokenContract,
   pid,
 ) => {
+
+
 //console.log("TOKEN/LP contracts", tokenContract, lpContract)
   //console.log("GET TOTAL LP VALUE", pid)
   // Get balance of the token address
@@ -135,6 +159,10 @@ export const getTotalLPWethValue = async (
   //console.log("Total supply", pid, totalSupply)
   //console.log("total supply", totalSupply)
   // Get total weth value for the lpContract = w1
+  if (!ethPrice || isNaN(ethPrice)){
+    ethPrice= await getEthPriceFromUniswap(wethContract, usdcContract)
+    console.log("LOADED ETH PRICE FROM UNISWAP")
+  }
 
   if (pid == 19 || pid==4){ // usdc pairs
 
@@ -163,9 +191,9 @@ export const getTotalLPWethValue = async (
 
       //console.log("usdc LP VALUE RET", tokenAmount.toString(), usdcAmount.toString(), pid)
 
-     // console.log("USDC TOTAL VALUE", (totalLpUsdcValue).div(new BigNumber(10).pow(6)))
-    //  console.log("USDC TOKEN PRICE", (usdcAmount).div(tokenAmount).div(ethPrice))
-     // console.log("USDC AMOUNT", usdcAmount)
+     // console.log("USDC TOTAL VALUE", (totalLpUsdcValue).div(new BigNumber(10).pow(6)).toString())
+      //console.log("USDC TOKEN PRICE", (usdcAmount).div(tokenAmount).div(ethPrice).toString(), ethPrice)
+      //console.log("USDC AMOUNT", usdcAmount.toNumber())
 
     return {
       tokenAmount,
