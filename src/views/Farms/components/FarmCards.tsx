@@ -216,7 +216,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, auth }) => {
         <CardContent>
           <StyledContent>
               { (farm.name.split("-")[0]=="MARK") ? (
-                  <MultiplierBadge>3x Rewards</MultiplierBadge>
+                  <MultiplierBadge>5x Rewards</MultiplierBadge>
                 ) : null
               }
 
